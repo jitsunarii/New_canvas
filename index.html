@@ -5,9 +5,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+
+
 </head>
 
 <body>
+    <canvas id="myCanvas" width="480" height="320"></canvas>
+
+    <script>
+        //要素の参照
+        const canvas = document.getElementById("myCanvas");
+        //2D描画コンテキスト=キャンバスに描画するために使うツール
+        const ctx = canvas.getContext("2d");
+
+        //サンプルコード="赤い四角形"
+        //キャンバス上の画面左端から20px,上橋から40pxの位置に、
+        //幅50px,高さ50pxの大きさの正方形
+        ctx.beginPath();
+        ctx.rect(20, 40, 50, 50);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath()
+
+        //サンプルコード="緑の円"
+        //円の中心の（x,y,半径,開始角度,終了角度,回転方向（false=時計,true=反時計）)
+        ctx.beginPath();
+        ctx.arc(240, 160, 20, 0, Math.PI * 2, false);
+        // 塗りつぶした時の色
+        // ctx.fillstyle = "green";
+        // 縁の色
+        ctx.strokestyle = "rgba(0,0,255,0.5)";
+        // fill()は塗りつぶし、stroke()は縁だけ
+        // ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    </script>
+
 
 </body>
 
