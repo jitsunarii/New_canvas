@@ -25,7 +25,7 @@
 
 <body>
     <canvas id="myCanvas" width="480" height="320" style="display:none;"></canvas>
-    <button>ランキング</button>
+    <button id="rank">ランキング</button>
     <button id="start">スタート</button>
     <input type="text" id="input">
     <div id="result">
@@ -35,6 +35,19 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+
+            $("#rank").on("click", function () {
+                // スコアを取得
+                const scores = JSON.parse(localStorage.getItem('scores')) || [];
+                // ランキングを表示
+                let rankingHTML = '<h2>ランキング</h2><ol>';
+                scores.forEach((score, index) => {
+                    rankingHTML += `<li>第${index + 1}位: ${score}</li>`;
+                });
+                rankingHTML += '</ol>';
+                $("#result").html(rankingHTML);
+            });
+
             $("#start").on("click", function () {
                 setTimeout(function () {
                     $("#myCanvas").css("display", "block");
@@ -69,6 +82,8 @@
                     const brickRowCount = 3;
                     //ブロックの列数
                     const brickColumnCount = 5;
+                    //ブロックの個数
+                    let brickCount = 15;
                     //ブロックの幅
                     const brickWidth = 75;
                     //ブロックの高さ
@@ -100,6 +115,21 @@
                     $(document).keyup(keyUpHandler);
                     //マウスを動かした時の処理用
                     $(document).mousemove(mouseMovehandler);
+                    // スコアを保存
+                    function saveScore(score) {
+                        // スコアを取得
+                        let scores = JSON.parse(localStorage.getItem('scores')) || [];
+                        // スコアを追加
+                        scores.push(score);
+                        // スコアを降順でソート
+                        scores.sort((a, b) => b - a);
+                        // 上位3つのスコアだけ残す
+                        scores = scores.slice(0, 3);
+                        // ローカルストレージに保存
+                        localStorage.setItem('scores', JSON.stringify(scores));
+                    }
+
+
                     // キーが押された時の処理
                     function keyDownHandler() {
                         //IE / Edge用に"Right"の指示がいるらしい！（"Left"も同様） 
@@ -148,45 +178,15 @@
                                         // ブロックが描画されなくなる(消える)
                                         b.status = 0;
                                         //スコアをプラス
-                                        score++;
-                                        // //全てのブロックを壊した時
-                                        // const history = [];
-
-                                        // $('#pull').on('click', function () {
-                                        //     const omikuji = ['大吉', '中吉', '小吉', '凶', '大凶'];
-                                        //     const random = Math.floor(Math.random() * omikuji.length);
-                                        //     const result = omikuji[random];
-                                        //     $('#echo').text(result);
-                                        //     //historyに結果を追加
-                                        //     history.unshift(result);
-                                        //     const historyhtml = [];
-
-                                        //     for (let i = 0; i < history.length; i++) {
-                                        //         historyhtml.push("<p>" + history[i] + "</p>");
-                                        //         $("#history").html(historyhtml);
-                                        //         console.log(i)
-                                        //     }
-                                        // });
-                                        if (score === brickColumnCount * brickRowCount) {
+                                        score += 20;
+                                        // ブロックのカウントをマイナス
+                                        brickCount--;
+                                        if (brickCount === 0) {
+                                            saveScore(score);
                                             alert("おめでとう");
-                                            const result = [];
-                                            const player_Info = score;
-
-
-                                            result.unshift(player_Info);
-                                            const resulthtml = [];
-                                            for (let i = 0; i < result.length; i++) {
-                                                resulthtml.push("<p>" + result[i] + "<p>");
-                                                $("#result").html(resulthtml);
-                                                console.log(i);
-                                                console.log(result[i]);
-                                            }
-
+                                            document.location.reload();
                                         }
-                                        //ランキングボタンを押すと見れるようにする
-                                        //1.プレイヤー名 score
-                                        // 更新する
-                                        // document.location.reload();
+
                                     }
                                 }
                             }
@@ -251,7 +251,7 @@
                     function draw() {
                         //canvasの内容を消去する
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        drawBricks()
+                        drawBricks();
                         drawBall();
                         drawPaddle();
                         drawScore();
@@ -281,6 +281,7 @@
                             else {
                                 lives--;
                                 if (!lives) {
+                                    saveScore(score);
                                     alert("GAME OVER");
                                     document.location.reload();
                                 }
@@ -290,6 +291,7 @@
                                     dx = 5;
                                     dy = -5;
                                     paddleX = (canvas.width - paddleWidth) / 2;
+                                    score -= 80;
                                 }
                             }
                         }
