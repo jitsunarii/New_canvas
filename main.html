@@ -16,11 +16,16 @@
             display: block;
             margin: 0 auto;
         }
+
+        body {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
     <canvas id="myCanvas" width="480" height="320"></canvas>
+    <button>ランキング</button>
     <input type="text" id="input">
     <textarea id="text_area"></textarea>
     <!-- jquery -->
@@ -154,7 +159,8 @@
                                         $("#text_area").val(result.point);
                                     }
                                 }
-
+                                //ランキングボタンを押すと見れるようにする
+                                //1.プレイヤー名 score
                                 // 更新する
                                 // document.location.reload();
                             }
