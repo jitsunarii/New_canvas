@@ -16,7 +16,7 @@
         }
 
         canvas {
-            background: blue;
+            background: rgb(108, 230, 244);
             display: block;
             margin: 0 auto;
         }
@@ -37,19 +37,24 @@
         <h1>ブロックを崩すゲーム</h1>
     </div>
     <canvas id="myCanvas" width="480" height="320" style="display:none;"></canvas>
-    <div id="all_Button"></div>
-    <button id="start">スタート</button>
-    <br><button id="rank">ランキング</button>
-    <button id="clear">ランクリセット</button>
+    <div id="all_Button">
+        <button id="start">スタート</button>
+        <br><button id="rank">ランキング</button>
+        <button id="clear">ランクリセット</button>
 
-    <div id="result">
+        <div id="result">
+        </div>
     </div>
+
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            //スタートを押した時
             $("#start").on("click", function () {
+                //タイトルを消す
                 $("#title").css("display", "none");
+                //ボタンを消す
                 $("#all_Button").css("display", "none");
                 setTimeout(function () {
                     $("#myCanvas").css("display", "block");
@@ -178,7 +183,7 @@
                                     //条件:弾の中心のx座標>ブロック左端のx座標かつ、弾の中心のx座標<ブロック右端のx座標
                                     //   かつ弾の中心のy座標>ブロック上端のy座標かつ、弾の中心のy座標<ブロック下端のy座標
                                     // (つまり弾がブロックに当たった時)
-                                    if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                                    if (x + ballRadius > b.x && x - ballRadius < b.x + brickWidth && y + ballRadius > b.y && y - ballRadius < b.y + brickHeight) {
                                         // 弾が跳ね返る
                                         dy = -dy;
                                         // ブロックが描画されなくなる(消える)
@@ -189,7 +194,7 @@
                                         brickCount--;
                                         if (brickCount === 0) {
                                             saveScore();
-                                            alert("おめでとう");
+                                            alert("おめでとう！コードを書け！");
                                             document.location.reload();
                                         }
 
@@ -288,7 +293,7 @@
                                 lives--;
                                 if (!lives) {
                                     saveScore();
-                                    alert("GAME OVER");
+                                    alert("コードを書け");
                                     document.location.reload();
                                 }
                                 else {
@@ -329,7 +334,7 @@
                     $("#result").html(rankingHTML);
                 }
                 else {
-                    let rankingHTML = "<h2>プレイヤーなし</h2>";
+                    let rankingHTML = "<h2>記録なし</h2>";
                     $("#result").html(rankingHTML);
                 }
             });
