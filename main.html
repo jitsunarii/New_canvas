@@ -28,7 +28,9 @@
     <button>ランキング</button>
     <button id="start">スタート</button>
     <input type="text" id="input">
-    <textarea id="text_area"></textarea>
+    <div id="result">
+        <p>すこあ</p>
+    </div>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -147,23 +149,39 @@
                                         b.status = 0;
                                         //スコアをプラス
                                         score++;
-                                        //全てのブロックを壊した時
+                                        // //全てのブロックを壊した時
+                                        // const history = [];
+
+                                        // $('#pull').on('click', function () {
+                                        //     const omikuji = ['大吉', '中吉', '小吉', '凶', '大凶'];
+                                        //     const random = Math.floor(Math.random() * omikuji.length);
+                                        //     const result = omikuji[random];
+                                        //     $('#echo').text(result);
+                                        //     //historyに結果を追加
+                                        //     history.unshift(result);
+                                        //     const historyhtml = [];
+
+                                        //     for (let i = 0; i < history.length; i++) {
+                                        //         historyhtml.push("<p>" + history[i] + "</p>");
+                                        //         $("#history").html(historyhtml);
+                                        //         console.log(i)
+                                        //     }
+                                        // });
                                         if (score === brickColumnCount * brickRowCount) {
                                             alert("おめでとう");
-                                            const result = {
-                                                name: $("input").val(),
-                                                point: score,
-                                            }
-                                            const json = JSON.stringify(result);
-                                            localStorage.setItem("result2", json);
+                                            const result = [];
+                                            const player_Info = score;
 
-                                            //名前とスコア保存はできてる
-                                            if (localStorage.getItem("result2")) {
-                                                const json = localStorage.getItem("result2");
-                                                const result = JSON.parse(json);
-                                                $("#input").val(result.name);
-                                                $("#text_area").val(result.point);
+
+                                            result.unshift(player_Info);
+                                            const resulthtml = [];
+                                            for (let i = 0; i < result.length; i++) {
+                                                resulthtml.push("<p>" + result[i] + "<p>");
+                                                $("#result").html(resulthtml);
+                                                console.log(i);
+                                                console.log(result[i]);
                                             }
+
                                         }
                                         //ランキングボタンを押すと見れるようにする
                                         //1.プレイヤー名 score
@@ -229,7 +247,7 @@
                         ctx.fillStyle = "0095DD";
                         ctx.fillText("Lives:" + lives, canvas.width - 65, 20);
                     }
-                    //全描写をまとめた処理
+                    //全描画をまとめた処理
                     function draw() {
                         //canvasの内容を消去する
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
